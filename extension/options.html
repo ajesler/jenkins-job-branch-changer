@@ -1,16 +1,26 @@
 <html>
   <head>
     <title>Options</title>
-    <script src="jquery-2.1.4.js"></script>
-    <script src="lodash.js"></script>
-    <script src="settings-store.js"></script>
-    <script src="options.js"></script>
+    <link rel="stylesheet" href="css/bootstrap.min.css">
+    <link rel="stylesheet" href="css/options.css">
+    <script src="js/vendor/jquery-2.1.4.js"></script>
+    <script src="js/vendor/lodash.js"></script>
+    <script src="js/settings-store.js"></script>
+    <script src="js/options.js"></script>
   </head>
+
   <body>
-    <label for="serverURL">Jenkins Server URL:</label>
-    <input id="serverURL" type="text" placeholder="jenkins.example.com">
-    <br />
-    <label for="jobNames">Jenkins Job Names:</label>
-    <textarea id="jobNames" placeholder="comma separated job names, eg 'jobA, jobB'"></textarea>
+    <div id="options">
+      <form>
+        <div class="form-group">
+          <label for="serverURL">Server URL</label>
+          <input type="text" class="form-control" id="serverURL" placeholder="https://jenkins.company.com">
+        </div>
+        <div class="form-group">
+          <label for="jobNames">Job Names</label>
+          <textarea id="jobNames" class="form-control" rows="3" placeholder="job-a, job-b, job-c"></textarea>
+        </div>
+      </form>
+    </div>
   </body>
 </html>

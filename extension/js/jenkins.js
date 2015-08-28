@@ -101,31 +101,57 @@ Jenkins.prototype.updateAllJobsBranch = function(newBranch) {
   return this.settings.getJobNames().then(updateJobs);
 };
 
+var setMessage = function(text, klass) {
+  $('#messages').html(text).attr("class", klass || "bg-info");
+}
+
+var jobNamesForDisplay = function(jobNames){
+  var boldNames = _.map(jobNames, function(name){
+    return "<b>"+name+"</b>";
+  });
+  return boldNames.join(", ");
+}
+
 $(document).ready(function(){
   var jenkins = new Jenkins();
+
   jenkins.urlFor("/reset_configs").then(function(url) { $.post(url) });
+
   jenkins.serverAvailable()
     .done(function(canReachJenkins){
       var iconClass = canReachJenkins ? "svg-green" : "svg-black";
       $('#icon').attr("class", iconClass);
       
       if(canReachJenkins) {
-        // enable branch update form
+        $('#updateForm').prop('hidden', false);
         jenkins.jobNames().then(function(jobNames){
-          $('#messages').text("Jobs: "+jobNames.join(", "));
-        })
+          setMessage("This will apply to "+jobNamesForDisplay(jobNames))
+        });
       } else {
-        $('#messages').text("Cant reach the server, please check your settings.");
+        setMessage("Cant reach the server, please check your settings.", "bg-danger");
       }
     }
   );
 
+  $('#branchName').on('input', function(event){
+    var disabled = event.target.value.length == 0;
+    $('#updateButton').prop('disabled', disabled);
+  });
+
   $('#updateButton').click(function(){
     var newBranch = $('#branchName').val();
-    jenkins.updateAllJobsBranch(newBranch).done(function(){
-      var args = Array.prototype.slice.call(arguments);
-      $('#messages').text("Updated jobs "+args.join(", ")+" to use branch "+newBranch);
-      $('#icon').attr("class", "svg-magenta");
-    });
+    jenkins.updateAllJobsBranch(newBranch)
+      .done(function(){
+        var args = Array.prototype.slice.call(arguments);
+        setMessage("Updated jobs "+jobNamesForDisplay(args)+" to use branch <b>"+newBranch+"</b>", "bg-success");
+        $('#icon').attr("class", "svg-magenta");
+        setTimeout(function() { $('#icon').attr("class", "svg-green"); }, 3000);
+      })
+      .fail(function(){
+        setMessage("Failed to set branch for jobs.", "bg-danger");
+      })
+      .always(function(){
+        $('#branchName').val('');
+      });
   });
 });

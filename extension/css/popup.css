@@ -1,0 +1,37 @@
+body {
+  width: 400px;
+}
+
+#popup {
+	padding: 10px;
+}
+
+#icon {
+	 height: 48px;
+	 width: 48px;
+}
+
+#messages {
+	margin: 10px;
+	padding: 5px;
+}
+
+.svg-gray {
+	fill: darkgray;
+	background: darkgray;
+}
+
+.svg-green {
+	fill: green;
+	background: green;
+}
+
+.svg-black {
+	fill: black;
+	background: black;
+}
+
+.svg-magenta {
+	fill: magenta;
+	background: magenta;
+}

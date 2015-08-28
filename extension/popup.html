@@ -1,23 +1,32 @@
 <html>
   <head>
     <title>Update Jenkins branch</title>
-    <link rel="stylesheet" href="style.css">
-    <script src="lodash.js"></script>
-    <script src="jquery-2.1.4.js"></script>
-    <script src="settings-store.js"></script>
-    <script src="jenkins.js"></script>
+    <link rel="stylesheet" href="css/bootstrap.min.css">
+    <link rel="stylesheet" href="css/popup.css">
+    <script src="js/vendor/lodash.js"></script>
+    <script src="js/vendor/jquery-2.1.4.js"></script>
+    <script src="js/settings-store.js"></script>
+    <script src="js/jenkins.js"></script>
   </head>
   <body>
-    <img id="state-icon" src="icon.png"></img>
-    <svg id="icon" class="svg-gray" xmlns=http://www.w3.org/2000/svg>
-        <circle id="blackcircle" cx="30" cy="30" r="10" />
-        <circle id="blackcircle" cx="70" cy="30" r="10" />
-        <ellipse id="blackellipse" cx="50" cy="75" rx="20" ry="8" />
-    </svg>
-    <p id="messages"></p>
+    <div id="popup">
+      <div class="row text-center">
+        <img id="icon" class="center-block" src="images/icon48.png" />
+      </div>
 
-    <input id="branchName" type="text" placeholder="new branch name"></input>
-    <input id="updateButton" type="button" value="Update Jobs" />
+      <p id="messages"></p>
+
+      <form id="updateForm" hidden>
+        <div class="col-lg-6">
+          <div class="input-group">
+            <input id="branchName" type="text" class="form-control" placeholder="my-feature-branch">
+            <span class="input-group-btn">
+              <button id="updateButton" class="btn btn-primary" type="button" disabled>update jobs</button>
+            </span>
+          </div>
+        </div>
+      </form>
+    </div>
   </body>
 </html>
 
