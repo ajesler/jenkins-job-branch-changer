@@ -50,6 +50,7 @@ $(document).ready(function(){
       })
       .always(function(){
         $('#branchName').val('');
+        $('#updateButton').prop('disabled', true);
       });
   }
 
