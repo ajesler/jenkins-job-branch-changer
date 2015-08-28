@@ -1,0 +1,23 @@
+<html>
+  <head>
+    <title>Update Jenkins branch</title>
+    <link rel="stylesheet" href="style.css">
+    <script src="lodash.js"></script>
+    <script src="jquery-2.1.4.js"></script>
+    <script src="settings-store.js"></script>
+    <script src="jenkins.js"></script>
+  </head>
+  <body>
+    <img id="state-icon" src="icon.png"></img>
+    <svg id="icon" class="svg-gray" xmlns=http://www.w3.org/2000/svg>
+        <circle id="blackcircle" cx="30" cy="30" r="10" />
+        <circle id="blackcircle" cx="70" cy="30" r="10" />
+        <ellipse id="blackellipse" cx="50" cy="75" rx="20" ry="8" />
+    </svg>
+    <p id="messages"></p>
+
+    <input id="branchName" type="text" placeholder="new branch name"></input>
+    <input id="updateButton" type="button" value="Update Jobs" />
+  </body>
+</html>
+

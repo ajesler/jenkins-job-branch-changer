@@ -1,0 +1,18 @@
+<?xml version="1.0"?>
+<project name="test" default="compile" basedir=".">
+  <property name="src" value="."/>
+  <property name="build" value="build"/>
+
+  <target name="init">
+		<branches>
+			<hudson.plugins.git.BranchSpec>
+				<name>master</name>
+			</hudson.plugins.git.BranchSpec>
+		</branches>
+    <mkdir dir="${build}"/>
+  </target>
+
+  <target name="compile" depends="init">
+       <javac srcdir="${src}" destdir="${build}"/>
+  </target>
+</project>
