@@ -5,27 +5,38 @@
     <link rel="stylesheet" href="css/popup.css">
     <script src="js/vendor/jquery-2.1.4.min.js"></script>
     <script src="js/vendor/lodash.min.js"></script>
+    <script src="js/polyfills.js"></script>
     <script src="js/settings-store.js"></script>
     <script src="js/jenkins.js"></script>
+    <script src="js/popup.js"></script>
   </head>
+
   <body>
     <div id="popup">
       <div class="row text-center">
         <img id="icon" class="center-block" src="images/icon48.png" />
       </div>
 
-      <p id="messages"></p>
+      <div class="row">
+        <p id="messages"></p>
+      </div>
 
-      <form id="updateForm" hidden>
-        <div class="col-lg-6">
-          <div class="input-group">
-            <input id="branchName" type="text" class="form-control" placeholder="my-feature-branch">
-            <span class="input-group-btn">
-              <button id="updateButton" class="btn btn-primary" type="button" disabled>update jobs</button>
-            </span>
+      <div class="row">
+        <form id="updateForm" hidden>
+          <div class="col-lg-6">
+            <div class="input-group">
+              <input id="branchName" type="text" class="form-control" placeholder="my-feature-branch">
+              <span class="input-group-btn">
+                <button id="updateButton" class="btn btn-primary" type="button" disabled>update jobs</button>
+              </span>
+            </div>
           </div>
-        </div>
-      </form>
+        </form>
+      </div>
+
+      <div>
+        <a href="options.html?show_back_link" class="button">Settings</a>
+      </div>
     </div>
   </body>
 </html>

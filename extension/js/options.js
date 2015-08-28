@@ -33,4 +33,7 @@ $(document).ready(function(){
     serverURLTextbox.val(serverURL);
     serverURLTextbox.change(saveServerURLOnChange);
   });
+
+  var backLink = window.location.href.endsWith("?show_back_link")
+  $('#back-link').prop('hidden', !backLink);
 });

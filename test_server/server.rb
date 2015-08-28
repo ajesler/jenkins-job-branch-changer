@@ -46,7 +46,7 @@ post '/reset_configs' do
 	end
 
 	headers 'Content-Type' => 'text/plain'
-	puts "Configs have been reset"
+	"Configs have been reset"
 end
 
 # curl -X POST -d @example_config.xml http://localhost:4567/job/myJob/config.xml --header "Content-Type:text/xml"
