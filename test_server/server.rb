@@ -18,7 +18,7 @@ def ensure_exists(file)
 end
 
 get '/' do
-	header 'Content-Type' => 'text/plain'
+	headers 'Content-Type' => 'text/plain'
 	"Yay!"
 end
 
@@ -33,7 +33,7 @@ post '/job/:job/config.xml' do
 	file = config_file_for(params[:job])
 	ensure_exists(file)
 	
-	header 'Content-Type' => 'text/plain'
+	headers 'Content-Type' => 'text/plain'
 
 	File.write(file, request.body.read)
 
@@ -45,7 +45,7 @@ post '/reset_configs' do
 		FileUtils.cp(CONFIG_FILE, f)
 	end
 
-	header 'Content-Type' => 'text/plain'
+	headers 'Content-Type' => 'text/plain'
 	puts "Configs have been reset"
 end
 
