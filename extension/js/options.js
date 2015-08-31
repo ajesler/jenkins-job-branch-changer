@@ -18,20 +18,29 @@ $(document).ready(function(){
   var saveServerURLOnChange = function(event) {
     var url = event.target.value;
     settings.setServerURL(url);
+  };
+
+  var saveTriggerBuild = function(){
+    var checked = $("#triggerBuild").prop('checked');
+    settings.setTriggerBuild(checked);
   }
-
-  var jobNamesTextArea = $('#jobNames');
-
-  settings.getJobNames().then(function(jobNames){
-    jobNamesTextArea.text((jobNames || []).join(", "));
-
-    jobNamesTextArea.change(saveJobNamesOnChange);
-  });
 
   var serverURLTextbox = $('#serverURL');
   settings.getServerURL().then(function(serverURL){
     serverURLTextbox.val(serverURL);
     serverURLTextbox.change(saveServerURLOnChange);
+  });
+
+  var jobNamesTextArea = $('#jobNames');
+  settings.getJobNames().then(function(jobNames){
+    jobNamesTextArea.text((jobNames).join(", "));
+    jobNamesTextArea.change(saveJobNamesOnChange);
+  });
+
+  var triggerBuildCheckbox = $('#triggerBuild');
+  settings.getTriggerBuild().then(function(checked){
+    triggerBuildCheckbox.prop('checked', checked);
+    triggerBuildCheckbox.change(saveTriggerBuild);
   });
 
   var backLink = window.location.href.endsWith("?show_back_link")

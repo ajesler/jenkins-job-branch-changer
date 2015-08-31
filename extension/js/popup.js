@@ -14,8 +14,12 @@ $(document).ready(function(){
 
   var setAffectedJobsMessage = function() {
     // TODO show the currently assigned branch for each of the jobs?
-    jenkins.jobNames().then(function(jobNames){
-      setMessage("This will apply to "+jobNamesForDisplay(jobNames))
+    $.when(jenkins.getJobNames(), jenkins.getTriggerBuild()).then(function(jobNames, willTriggerBuild){
+      var message = "This will apply to "+jobNamesForDisplay(jobNames);
+      if(willTriggerBuild){
+        message += " and will trigger a build for each job";
+      }
+      setMessage(message);
     });
   }
 
@@ -36,22 +40,29 @@ $(document).ready(function(){
     $('#updateButton').prop('disabled', disabled);
   });
 
+  var resetUpdateControls = function() {
+    $('#branchName').val('');
+    $('#updateButton').button('reset');
+    setTimeout(function(){ $('#updateButton').prop('disabled', 'disabled'); }, 5);
+  };
+
   var submitBranchNameChange = function(){
     var newBranch = $('#branchName').val();
+
+    if(newBranch.trim() == '') {
+      return;
+    }
+
+    $('#updateButton').button('loading');
     jenkins.updateAllJobsBranch(newBranch)
       .done(function(){
         var args = Array.prototype.slice.call(arguments);
         setMessage("Updated jobs "+jobNamesForDisplay(args)+" to use branch <b>"+newBranch+"</b>", "bg-success");
-        setTimeout(function() {
-          setAffectedJobsMessage();
-        }, 3000);
+        resetUpdateControls();
       })
       .fail(function(){
         setMessage("Failed to set branch for jobs.", "bg-danger");
-      })
-      .always(function(){
-        $('#branchName').val('');
-        $('#updateButton').prop('disabled', true);
+        resetUpdateControls();
       });
   }
 

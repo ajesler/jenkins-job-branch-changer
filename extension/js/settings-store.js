@@ -4,11 +4,11 @@
   jenkins.SettingsStore = function() { };
 
   jenkins.SettingsStore.prototype = {
-    get: function(key) {
+    get: function(key, defaultValue) {
       var deferred = $.Deferred();
       chrome.storage.sync.get(key,
         function (storage) {
-          deferred.resolve(storage[key]);
+          deferred.resolve(storage[key] || defaultValue);
         });
       return deferred;
     },
@@ -21,8 +21,7 @@
     },
 
     getServerURL: function() {
-      // default to ''
-      return this.get("serverURL");
+      return this.get("serverURL", '');
     },
 
     setServerURL: function(serverURL) {
@@ -30,12 +29,19 @@
     },
 
     getJobNames: function() {
-      // default to []
-      return this.get("jobNames");
+      return this.get("jobNames", []);
     },
 
     setJobNames: function(jobNames) {
       this.set("jobNames", jobNames);
+    },
+
+    getTriggerBuild: function() {
+      return this.get("triggerBuild", false);
+    },
+
+    setTriggerBuild: function(triggerBuild) {
+      this.set("triggerBuild", triggerBuild);
     }
   };
 

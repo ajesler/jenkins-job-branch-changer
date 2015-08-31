@@ -22,14 +22,14 @@ get '/' do
 	"Yay!"
 end
 
-get '/job/:job/config.xml' do
+get '/view/All/job/:job/config.xml' do
 	file = config_file_for(params[:job])
 	ensure_exists(file)
 
 	send_file file, :type => :xml
 end
 
-post '/job/:job/config.xml' do
+post '/view/All/job/:job/config.xml' do
 	file = config_file_for(params[:job])
 	ensure_exists(file)
 	
@@ -37,7 +37,17 @@ post '/job/:job/config.xml' do
 
 	File.write(file, request.body.read)
 
+	sleep 1
+
 	"Config file updated"
+end
+
+post '/view/All/job/:job/build' do
+	headers 'Content-Type' => 'text/plain'
+
+	sleep 1
+
+	"Triggered a build for #{params[:job]}"
 end
 
 post '/reset_configs' do
@@ -49,5 +59,5 @@ post '/reset_configs' do
 	"Configs have been reset"
 end
 
-# curl -X POST -d @example_config.xml http://localhost:4567/job/myJob/config.xml --header "Content-Type:text/xml"
+# curl -X POST -d @example_config.xml http://localhost:4567/view/All/job/myJob/config.xml --header "Content-Type:text/xml"
 # curl -X POST -d @example_config.xml http://localhost:4567/reset_configs

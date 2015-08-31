@@ -2,8 +2,12 @@ var Jenkins = function (jenkinsServerURL, jobNames) {
   this.settings = new jenkins.SettingsStore;
 };
 
-Jenkins.prototype.jobNames = function() {
+Jenkins.prototype.getJobNames = function() {
   return this.settings.getJobNames();
+};
+
+Jenkins.prototype.getTriggerBuild = function() {
+  return this.settings.getTriggerBuild();
 };
 
 Jenkins.prototype.urlFor = function(path) {
@@ -21,6 +25,10 @@ Jenkins.prototype.urlFor = function(path) {
 
 Jenkins.prototype.urlForJobConfig = function(jobName) {
   return this.urlFor("view/All/job/"+jobName+"/config.xml");
+};
+
+Jenkins.prototype.urlForJobTrigger = function(jobName) {
+  return this.urlFor("view/All/job/"+jobName+"/build");
 };
 
 Jenkins.prototype.serverAvailable = function () {
@@ -68,8 +76,6 @@ Jenkins.prototype.saveJobConfig = function(jobName, config_xml) {
       defer.reject(jobName);
     });
   });
-  // defer.resolve(jobName);
-  // console.log('Fake saved '+jobName);
 
   return defer;
 };
@@ -90,21 +96,47 @@ Jenkins.prototype.updateJobBranch = function(jobName, newBranch) {
     var defer = $.Deferred();
 
     var updated_config = this.changeBranchNameInConfig(config_xml, newBranch);
-
-    // TODO log the branch change?
-
     var updated_config_string = this.xmlToString(config_xml);
 
     defer.resolve(jobName, updated_config_string);
     return defer;
   }.bind(this);
 
-  return this.loadJobConfig(jobName).then(updateConfigBranchName).then(this.saveJobConfig.bind(this));
+  var saveJobConfig = this.saveJobConfig.bind(this);
+
+  var triggerBuildIfSet = function() {
+    return this.settings.getTriggerBuild().then(function(triggerBuild){
+      if(triggerBuild) {
+        return this.triggerBuild(jobName);
+      } else {
+        var defer = $.Deferred();
+        defer.resolve(jobName);
+        return defer;
+      }
+    }.bind(this));
+  }.bind(this);
+
+  return this.loadJobConfig(jobName)
+    .then(updateConfigBranchName)
+    .then(saveJobConfig)
+    .then(triggerBuildIfSet);
+};
+
+Jenkins.prototype.triggerBuild = function(jobName) {
+  var postToURL = function(url) {
+    return $.post(url).then(function(){
+      var defer = $.Deferred();
+      defer.resolve(jobName);
+      return defer;
+    });
+  };
+
+  return this.urlForJobTrigger(jobName).then(postToURL);
 };
 
 Jenkins.prototype.updateAllJobsBranch = function(newBranch) {
   var updateJobs = function(jobNames) {
-    var updates = _.map(jobNames, function(job){
+    var updates = _.map(jobNames, function(job) {
       return this.updateJobBranch(job, newBranch);
     }, this);
     return $.when.apply(null, updates);
