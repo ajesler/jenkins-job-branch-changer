@@ -9,7 +9,7 @@ Jenkins.prototype.jobNames = function() {
 Jenkins.prototype.urlFor = function(path) {
   var defer = $.Deferred();
   this.settings.getServerURL().done(function(serverURL){
-    serverURL = serverURL.endsWith('/') ? serverURL.substring(0, serverURL.length-2) : serverURL
+    serverURL = serverURL.endsWith('/') ? serverURL.substring(0, serverURL.length-1) : serverURL
     path = path.startsWith('/') ? path.substring(1) : path
 
     var url = serverURL+'/'+path;
@@ -20,7 +20,7 @@ Jenkins.prototype.urlFor = function(path) {
 };
 
 Jenkins.prototype.urlForJobConfig = function(jobName) {
-  return this.urlFor("/job/"+jobName+"/config.xml");
+  return this.urlFor("view/All/job/"+jobName+"/config.xml");
 };
 
 Jenkins.prototype.serverAvailable = function () {
@@ -68,17 +68,21 @@ Jenkins.prototype.saveJobConfig = function(jobName, config_xml) {
       defer.reject(jobName);
     });
   });
+  // defer.resolve(jobName);
+  // console.log('Fake saved '+jobName);
 
   return defer;
 };
 
 Jenkins.prototype.changeBranchNameInConfig = function(config_xml, newBranch) {
+  // TODO what if there is no git.BranchSpec ?
   var xml = $(config_xml).find('hudson\\.plugins\\.git\\.BranchSpec>name').text(newBranch);
   return xml;
 };
 
 Jenkins.prototype.xmlToString = function(xml) {
-  return new XMLSerializer().serializeToString(xml);
+  var xmlString = new XMLSerializer().serializeToString(xml);
+  return xmlString;
 };
 
 Jenkins.prototype.updateJobBranch = function(jobName, newBranch) {
@@ -86,6 +90,9 @@ Jenkins.prototype.updateJobBranch = function(jobName, newBranch) {
     var defer = $.Deferred();
 
     var updated_config = this.changeBranchNameInConfig(config_xml, newBranch);
+
+    // TODO log the branch change?
+
     var updated_config_string = this.xmlToString(config_xml);
 
     defer.resolve(jobName, updated_config_string);

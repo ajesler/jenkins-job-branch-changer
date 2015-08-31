@@ -1,9 +1,11 @@
 {
   "manifest_version": 2,
 
-  "name": "jenkins branch changer",
-  "description": "Changes the git branch a jenkins job uses.",
+  "name": "Jenkins Job Git Branch Changer",
+  "description": "Changes the git branch used by a list of Jenkins jobs.",
   "version": "0.1",
+// "homepage_url": "https://github.com/..."
+
   "icons": { "48": "images/icon48.png" },
   "browser_action": {
     "default_icon": "images/icon48.png",
@@ -11,7 +13,9 @@
     "default_title": "Jenkins Branch Changer"
   },
   "permissions": [
-    "storage"
+    "storage",
+    "https://*/",
+    "http://*/"
   ],
   "options_page": "options.html",
   "options_ui": {

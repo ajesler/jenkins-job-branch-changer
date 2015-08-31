@@ -21,6 +21,7 @@
     },
 
     getServerURL: function() {
+      // default to ''
       return this.get("serverURL");
     },
 
@@ -29,6 +30,7 @@
     },
 
     getJobNames: function() {
+      // default to []
       return this.get("jobNames");
     },
 

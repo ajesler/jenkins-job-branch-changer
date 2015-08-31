@@ -23,7 +23,7 @@ $(document).ready(function(){
   var jobNamesTextArea = $('#jobNames');
 
   settings.getJobNames().then(function(jobNames){
-    jobNamesTextArea.text(jobNames.join(", "));
+    jobNamesTextArea.text((jobNames || []).join(", "));
 
     jobNamesTextArea.change(saveJobNamesOnChange);
   });
