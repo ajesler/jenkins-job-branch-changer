@@ -5,6 +5,7 @@ Changes the git branch for a set of Jenkins jobs. This saves you from having to 
 
 ## TODO
 
+- Click on logo to go to server
 - Show current git branch assigned to jenkins job
 - Better error handling - what if the config has no git branch setting?
 - Do jobs get updated if popup is closed before request returns? Should this use a background/event page?

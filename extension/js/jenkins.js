@@ -95,10 +95,18 @@ Jenkins.prototype.updateJobBranch = function(jobName, newBranch) {
   var updateConfigBranchName = function(config_xml) {
     var defer = $.Deferred();
 
-    var updated_config = this.changeBranchNameInConfig(config_xml, newBranch);
-    var updated_config_string = this.xmlToString(config_xml);
+    var hasGitBranchName = function() {
+      return $(config_xml).find('hudson\\.plugins\\.git\\.BranchSpec>name').length > 0;
+    };
 
-    defer.resolve(jobName, updated_config_string);
+    if (hasGitBranchName()) {
+      var updated_config = this.changeBranchNameInConfig(config_xml, newBranch);
+      var updated_config_string = this.xmlToString(config_xml);
+
+      defer.resolve(jobName, updated_config_string);
+    } else {
+      defer.fail(jobName, "Missing git branch name in config");
+    }
     return defer;
   }.bind(this);
 
