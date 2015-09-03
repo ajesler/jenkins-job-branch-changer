@@ -24,11 +24,12 @@ $(document).ready(function(){
   }
 
   jenkins.serverAvailable()
-    .done(function(canReachJenkins){
+    .done(function(canReachJenkins, serverURL){
       if(canReachJenkins) {
         $('#updateForm').prop('hidden', false);
         $('#branchName').focus();
         setAffectedJobsMessage();
+        $('#serverLink').attr('href', serverURL);
       } else {
         setMessage("Cant reach the server, please check your <a href='options.html?show_back_link'>settings</a>.", "bg-danger");
       }

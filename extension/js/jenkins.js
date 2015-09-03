@@ -35,8 +35,8 @@ Jenkins.prototype.serverAvailable = function () {
   var deferred = $.Deferred();
   this.settings.getServerURL().done(function(serverURL){
     $.get(serverURL)
-      .done(function () { deferred.resolve(true) })
-      .fail(function () { deferred.resolve(false) })
+      .done(function () { deferred.resolve(true, serverURL) })
+      .fail(function () { deferred.resolve(false, serverURL) })
   })
   return deferred;
 };
