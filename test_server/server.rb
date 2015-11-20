@@ -5,6 +5,9 @@ CONFIG_FILE = "config.xml"
 
 before do
 	headers 'Access-Control-Allow-Origin' => '*'
+	headers 'Access-Control-Allow-Credentials' => 'true'
+	headers 'Access-Control-Allow-Methods' => 'GET,POST,OPTIONS'
+	headers 'Access-Control-Allow-Headers' => 'origin,content-type,accept,Access-Control-Allow-Credentials'
 end
 
 def config_file_for(job)
@@ -19,7 +22,12 @@ end
 
 get '/' do
 	headers 'Content-Type' => 'text/plain'
-	"Yay!"
+	"This is totally a jenkins server. Whats that behind you? *points*"
+end
+
+options '/view/All/job/:job/config.xml' do
+	headers 'Allow' => 'GET,POST,OPTIONS'
+	"Success!"
 end
 
 get '/view/All/job/:job/config.xml' do
@@ -32,12 +40,10 @@ end
 post '/view/All/job/:job/config.xml' do
 	file = config_file_for(params[:job])
 	ensure_exists(file)
-	
+
 	headers 'Content-Type' => 'text/plain'
 
 	File.write(file, request.body.read)
-
-	sleep 1
 
 	"Config file updated"
 end
@@ -45,13 +51,11 @@ end
 post '/view/All/job/:job/build' do
 	headers 'Content-Type' => 'text/plain'
 
-	sleep 1
-
 	"Triggered a build for #{params[:job]}"
 end
 
-post '/reset_configs' do
-	Dir.glob("job_*_config.xml").each do |f| 
+get '/reset_configs' do
+	Dir.glob("job_*_config.xml").each do |f|
 		FileUtils.cp(CONFIG_FILE, f)
 	end
 
