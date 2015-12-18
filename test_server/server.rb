@@ -8,6 +8,7 @@ before do
 	headers 'Access-Control-Allow-Credentials' => 'true'
 	headers 'Access-Control-Allow-Methods' => 'GET,POST,OPTIONS'
 	headers 'Access-Control-Allow-Headers' => 'origin,content-type,accept,Access-Control-Allow-Credentials'
+	headers 'Cache-Control' => 'no-store, must-revalidate'
 end
 
 def config_file_for(job)
@@ -48,20 +49,18 @@ post '/view/All/job/:job/config.xml' do
 	"Config file updated"
 end
 
-post '/view/All/job/:job/build' do
+post '/job/:job/build' do
 	headers 'Content-Type' => 'text/plain'
 
 	"Triggered a build for #{params[:job]}"
 end
 
 get '/reset_configs' do
-	Dir.glob("job_*_config.xml").each do |f|
-		FileUtils.cp(CONFIG_FILE, f)
-	end
+	FileUtils.rm Dir.glob("job_*_config.xml")
 
 	headers 'Content-Type' => 'text/plain'
 	"Configs have been reset"
 end
 
 # curl -X POST -d @example_config.xml http://localhost:4567/view/All/job/myJob/config.xml --header "Content-Type:text/xml"
-# curl -X POST -d @example_config.xml http://localhost:4567/reset_configs
+# curl -X GET http://localhost:4567/reset_configs
